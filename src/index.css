@@ -26,6 +26,10 @@
   font-weight: 900;
 }
 
+body {
+  background: #e7e8ea;
+}
+
 * {
   font-family: "PeydaWeb";
 }
