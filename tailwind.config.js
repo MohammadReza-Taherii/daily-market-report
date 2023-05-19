@@ -11,6 +11,9 @@ module.exports = {
       fontFamily: {
         IRANYekan: ["PeydaWeb", "sans-serif"],
       },
+      gridColumn: {
+        "span-15": "span 15 / span 15",
+      },
     },
   },
   plugins: [],
