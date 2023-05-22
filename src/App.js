@@ -62,8 +62,8 @@ function App() {
         <div className="flex flex-col gap-[36px]">
           <OuterBox title="بازار سرمایه" className="gap-[36px]">
             <div className="flex flex-col gap-[24px]">
-              <div className="flex flex-row gap-[24px]">
-                <div className="flex-1 grid grid-cols-2 gap-[24px]">
+              <div className="flex flex-col lg:flex-row gap-[24px]">
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-[24px]">
                   {bouseList.map((item, i) => (
                     <InnerBox key={i} title={item.title}>
                       <div className="flex flex-col gap-[1px]">
@@ -99,35 +99,39 @@ function App() {
             <h5 className="text-white flex justify-center items-center gap-[12px] text-[22px] font-semibold before:content-[''] before:bg-white before:w-[60px] before:h-[1px] before:flex after:content-[''] after:bg-white after:w-[60px] after:h-[1px] after:flex">
               نمادهای مورد توجه
             </h5>
-            <div className="grid grid-cols-3 gap-[20px]">
-              {[...Array(3).keys()].map((i) => (
-                <InnerBox key={i} title="بیشترین ارزش معاملات">
-                  <ul className="list-none px-[20px] flex flex-col gap-[8px]">
-                    {instrumentList.map((inst, i) => (
-                      <React.Fragment key={i}>
-                        <li
-                          key={i}
-                          className="flex justify-between items-center"
-                        >
-                          <p className="text-[14px] font-bold">{inst.title}</p>
-                          <div className="text-left">
-                            <p className="text-green text-[14px] font-bold">
-                              {inst.percent}
+            <div className="flex flex-col gap-[20px]">
+              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-[20px]">
+                {[...Array(3).keys()].map((i) => (
+                  <InnerBox key={i} title="بیشترین ارزش معاملات">
+                    <ul className="list-none px-[20px] flex flex-col gap-[8px]">
+                      {instrumentList.map((inst, i) => (
+                        <React.Fragment key={i}>
+                          <li
+                            key={i}
+                            className="flex justify-between items-center"
+                          >
+                            <p className="text-[14px] font-bold">
+                              {inst.title}
                             </p>
-                            <p className="text-gray text-[12px] font-normal">
-                              {inst.subtitle}
-                            </p>
-                          </div>
-                        </li>
-                        {instrumentList.length !== i + 1 && (
-                          <span className="flex w-full h-[1px] bg-gray opacity-50"></span>
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </ul>
-                </InnerBox>
-              ))}
-              <div className="bg-white rounded-[14px] p-[20px] col-start-1 col-end-4">
+                            <div className="text-left">
+                              <p className="text-green text-[14px] font-bold">
+                                {inst.percent}
+                              </p>
+                              <p className="text-gray text-[12px] font-normal">
+                                {inst.subtitle}
+                              </p>
+                            </div>
+                          </li>
+                          {instrumentList.length !== i + 1 && (
+                            <span className="flex w-full h-[1px] bg-gray opacity-50"></span>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </ul>
+                  </InnerBox>
+                ))}
+              </div>
+              <div className="bg-white rounded-[14px] p-[20px]">
                 <p className="text-[14px] font-semibold">توضیحات</p>
               </div>
             </div>
@@ -135,12 +139,15 @@ function App() {
 
           <OuterBox title="ارز و طلا">
             <div className="flex flex-col gap-[20px]">
-              <div className="grid grid-cols-8 gap-[20px]">
+              <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-8 gap-[20px]">
                 {currencyAndGoldList.slice(0, 2).map((item, i) => (
                   <InnerBox
                     key={i}
                     title={item.title}
-                    className={clsx(i === 0 && "col-start-3", "col-span-2")}
+                    className={clsx(
+                      i === 0 && "sm:col-start-1 md:col-start-2",
+                      "sm:col-span-2 md:col-span-3"
+                    )}
                   >
                     <div className="flex flex-col gap-[1px]">
                       <h5 className="text-black text-[24px] font-bold text-center">
@@ -153,9 +160,18 @@ function App() {
                   </InnerBox>
                 ))}
               </div>
-              <div className="grid grid-cols-10 gap-[20px]">
+              <div className="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-10 gap-[20px]">
                 {currencyAndGoldList.slice(2, 7).map((item, i) => (
-                  <InnerBox key={i} title={item.title} className={"col-span-2"}>
+                  <InnerBox
+                    key={i}
+                    title={item.title}
+                    className={clsx(
+                      "sm:col-span-2 md:col-span-2",
+                      currencyAndGoldList.length - 1 === i + 3 &&
+                        "sm:col-start-2",
+                      currencyAndGoldList.length === i + 3 && "sm:col-start-4"
+                    )}
+                  >
                     <div className="flex flex-col gap-[1px]">
                       <h5 className="text-black text-[24px] font-bold text-center">
                         {item.price}
@@ -175,12 +191,17 @@ function App() {
 
           <OuterBox title="کامودیتی">
             <div className="flex flex-col gap-[20px]">
-              <div className="grid grid-cols-10 gap-[20px]">
+              <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-8 gap-[20px]">
                 {commodityList.slice(0, 3).map((item, i) => (
                   <InnerBox
                     key={i}
                     title={item.title}
-                    className={clsx(i === 0 && "col-start-3", "col-span-2")}
+                    className={clsx(
+                      i === 0 &&
+                        "sm:col-start-1 md:col-start-auto lg:col-start-2",
+                      "col-span-2 md:col-span-1 lg:col-span-2",
+                      i === 2 && "sm:col-start-2 md:col-start-auto"
+                    )}
                   >
                     <div className="flex flex-col gap-[1px]">
                       <h5 className="text-black text-[24px] font-bold text-center">
@@ -193,9 +214,16 @@ function App() {
                   </InnerBox>
                 ))}
               </div>
-              <div className="grid grid-cols-12 gap-[20px]">
+              <div className="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12  gap-[20px]">
                 {commodityList.slice(3, 9).map((item, i) => (
-                  <InnerBox key={i} title={item.title} className={"col-span-2"}>
+                  <InnerBox
+                    key={i}
+                    title={item.title}
+                    className={clsx(
+                      "col-span-2",
+                      i === 4 && "md:col-start-3 lg:col-start-auto"
+                    )}
+                  >
                     <div className="flex flex-col gap-[1px]">
                       <h5 className="text-black text-[24px] font-bold text-center">
                         {item.price}
