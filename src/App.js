@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import InnerBox from "./component/InnerBox";
 import OuterBox from "./component/OuterBox";
 import clsx from "clsx";
+import axios from "axios";
 
 function App() {
   const bouseList = [
@@ -47,6 +48,127 @@ function App() {
     { title: "ورق گرم", price: "1،386،578", percent: "+6.03" },
     { title: "ورق سرد", price: "1،386،578", percent: "+6.03" },
   ];
+
+  // useEffect(() => {
+  //   // Automatic login request when the component loads
+  //   login();
+  // }, []);
+
+  // const login = async () => {
+  //   const url = "https://api.bourseview.com/login";
+  //   const data = {
+  //     username: "09127635409",
+  //     password: "Mm0017554659",
+  //   };
+
+  //   const requestOptions = {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       // Origin: "http://192.168.104.254:8000",
+  //     },
+  //     // mode: "cors",
+  //     body: JSON.stringify(data),
+  //   };
+
+  //   try {
+  //     const response = await fetch(url, requestOptions);
+  //     const responseData = await response.json();
+
+  //     // Handle the response data here (e.g., store token in state, redirect, etc.)
+  //     console.log(responseData);
+  //   } catch (error) {
+  //     // Handle any errors that occurred during the fetch
+  //     console.error("Error:", error);
+  //   }
+  // };
+
+  // const [tickers, setTickers] = useState([]);
+  // const [token, setToken] = useState(null);
+
+  // useEffect(() => {
+  //   // Fetch the token from your Node.js server
+  //   axios
+  //     .get("http://localhost:3001/get-token")
+  //     .then((response) => {
+  //       setToken(response.data.token);
+  //       // console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       // console.error("Error fetching token:", error.message);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   // if (token) {
+  //   // Fetch tickers using the token as Authorization
+  //   axios
+  //     .get("https://api.bourseview.com/v2/tickers", {
+  //       // credentials: "include",
+  //       // headers: {
+  //       //   "content-Type": "application/json",
+  //       //   // Cookie: "Authorization=" + token,
+  //       // },
+  //     })
+  //     .then((response) => {
+  //       setTickers(response.data);
+  //     })
+  //     .catch((error) => {
+  //       // console.error("Error fetching tickers:", error.message);
+  //     });
+  //   // }
+  // }, []);
+
+  // ----------
+
+  // useEffect(() => {
+  //   // Function to fetch the token from your Node.js API
+  //   const fetchToken = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:3001/get-token"); // Assuming your Node.js API runs on localhost:3001
+
+  //       // Assuming the response is a JSON object containing the 'token' property
+  //       // setToken(response.data.token);
+  //     } catch (error) {
+  //       console.error("Error fetching token:", error.message);
+  //     }
+  //   };
+
+  //   fetchToken();
+  // }, []);
+
+  // ----------
+
+  const [tickers, setTickers] = useState([]);
+
+  useEffect(() => {
+    // Fetch the token from the Node.js server
+    axios
+      .post("http://localhost:3001/get-token", {
+        username: "your_username",
+        password: "your_password",
+      })
+      .then((response) => {
+        console.log("Token:", response.data.token);
+        // After getting the token, fetch tickers data from the API
+        axios
+          .get("http://localhost:3001/get-tickers", {
+            headers: {
+              Authorization: `Bearer ${response.data.token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Tickers:", response.data);
+            setTickers(response.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching tickers:", error.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching token:", error.message);
+      });
+  }, []);
 
   return (
     <div className="App">
