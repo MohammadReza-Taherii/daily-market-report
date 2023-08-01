@@ -102,33 +102,59 @@ function App() {
   // }, []);
 
   useEffect(() => {
-    // fetchTickers();
+    fetchTickers();
     fetchExchanges();
   }, []);
 
+  // const fetchTickers = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "https://daily-market-report-server.iran.liara.run/tickers"
+  //     );
+  //     setTickers(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching tickers:", error.message);
+  //   }
+  // };
+
+  // const fetchExchanges = async () => {
+  //   setExchangesLoading(true);
+  //   try {
+  //     const response = await axios.get(
+  //       // "https://daily-market-report-server.iran.liara.run/exchanges"
+  //       "http://localhost:8002/exchanges"
+  //     );
+  //     setExchanges(response.data);
+  //     setExchangesLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching exchanges:", error.message);
+  //     setExchangesLoading(false);
+  //   }
+  // };
+
   const fetchTickers = async () => {
-    try {
-      const response = await axios.get(
-        "https://daily-market-report-server.iran.liara.run/tickers"
-      );
-      setTickers(response.data);
-    } catch (error) {
-      console.error("Error fetching tickers:", error.message);
-    }
+    axios
+      .get("https://daily-market-report-server.iran.liara.run/tickers")
+      .then((response) => {
+        setTickers(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching tickers:", error);
+      });
   };
 
   const fetchExchanges = async () => {
     setExchangesLoading(true);
-    try {
-      const response = await axios.get(
-        "https://daily-market-report-server.iran.liara.run/exchanges"
-      );
-      setExchanges(response.data);
-      setExchangesLoading(false);
-    } catch (error) {
-      console.error("Error fetching exchanges:", error.message);
-      setExchangesLoading(false);
-    }
+    axios
+      .get("https://daily-market-report-server.iran.liara.run/exchanges")
+      .then((response) => {
+        setExchanges(response.data);
+        setExchangesLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching exchanges:", error);
+        setExchangesLoading(false);
+      });
   };
 
   return (
