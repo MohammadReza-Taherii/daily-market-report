@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import InnerBox from "./component/InnerBox";
 import OuterBox from "./component/OuterBox";
 import clsx from "clsx";
+import axios from "axios";
+import { BeatLoader } from "react-spinners";
+import { thousandSeparator } from "./utilities/utilities";
 
 function App() {
   const bouseList = [
@@ -48,6 +51,112 @@ function App() {
     { title: "ورق سرد", price: "1،386،578", percent: "+6.03" },
   ];
 
+  const [tokenLoading, setTokenLoading] = useState(true);
+  const [tickers, setTickers] = useState([]);
+  const [exchanges, setExchanges] = useState([]);
+  const [exchangesLoading, setExchangesLoading] = useState(true);
+
+  // useEffect(() => {
+  //   axios
+  //     .post("http://localhost:3002/get-token", {
+  //       // username: "your_username",
+  //       // password: "your_password",
+  //     })
+  //     .then((response) => {
+  //       console.log("Token:", response.data.token);
+  //       setTokenLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching token:", error.message);
+  //       setTokenLoading(false);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   // Fetch the token from the Node.js server
+  //   axios
+  //     .post("http://localhost:3001/get-token", {
+  //       username: "your_username",
+  //       password: "your_password",
+  //     })
+  //     .then((response) => {
+  //       console.log("Token:", response.data.token);
+  //       // After getting the token, fetch tickers data from the API
+  //       axios
+  //         .get("http://localhost:3001/get-tickers", {
+  //           headers: {
+  //             Authorization: `Bearer ${response.data.token}`,
+  //           },
+  //         })
+  //         .then((response) => {
+  //           console.log("Tickers:", response.data);
+  //           setTickers(response.data);
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error fetching tickers:", error.message);
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching token:", error.message);
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    fetchTickers();
+    fetchExchanges();
+  }, []);
+
+  // const fetchTickers = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "https://daily-market-report-server.iran.liara.run/tickers"
+  //     );
+  //     setTickers(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching tickers:", error.message);
+  //   }
+  // };
+
+  // const fetchExchanges = async () => {
+  //   setExchangesLoading(true);
+  //   try {
+  //     const response = await axios.get(
+  //       // "https://daily-market-report-server.iran.liara.run/exchanges"
+  //       "http://localhost:8002/exchanges"
+  //     );
+  //     setExchanges(response.data);
+  //     setExchangesLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching exchanges:", error.message);
+  //     setExchangesLoading(false);
+  //   }
+  // };
+
+  const fetchTickers = async () => {
+    axios
+      .get("https://daily-market-report-server.iran.liara.run/tickers")
+      .then((response) => {
+        setTickers(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching tickers:", error);
+      });
+  };
+
+  const fetchExchanges = async () => {
+    setExchangesLoading(true);
+    axios
+      .get("https://daily-market-report-server.iran.liara.run/exchanges")
+      .then((response) => {
+        setExchanges(response.data);
+        setExchangesLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching exchanges:", error);
+        setExchangesLoading(false);
+      });
+  };
+
   return (
     <div className="App">
       <div className="container mx-auto py-[32px] flex flex-col gap-[32px]">
@@ -64,15 +173,23 @@ function App() {
             <div className="flex flex-col gap-[24px]">
               <div className="flex flex-col lg:flex-row gap-[24px]">
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-[24px]">
-                  {bouseList.map((item, i) => (
-                    <InnerBox key={i} title={item.title}>
-                      <div className="flex flex-col gap-[1px]">
-                        <h5 className="text-black text-[24px] font-bold text-center">
-                          {item.price}
-                        </h5>
-                        <h6 className="text-green text-[18px] font-bold text-center">
-                          {item.percent}
-                        </h6>
+                  {[...Array(6).keys()].map((i) => (
+                    <InnerBox key={i} title={"exchanges.items[0].name"}>
+                      <div className="flex flex-col gap-[1px] items-center">
+                        {!exchangesLoading ? (
+                          <>
+                            <h5 className="text-black text-[24px] font-bold text-center">
+                              {thousandSeparator(
+                                exchanges.items[0].quotes[0].value
+                              )}
+                            </h5>
+                            <h6 className="text-green text-[18px] font-bold text-center">
+                              {exchanges.items[0].quotes[0].value}
+                            </h6>
+                          </>
+                        ) : (
+                          <BeatLoader color="#999" />
+                        )}
                       </div>
                     </InnerBox>
                   ))}
