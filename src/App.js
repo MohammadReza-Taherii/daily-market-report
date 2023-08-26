@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import "./App.css";
 import InnerBox from "./component/InnerBox";
 import OuterBox from "./component/OuterBox";
 import clsx from "clsx";
-import axios from "axios";
 import { BeatLoader } from "react-spinners";
 import { thousandSeparator } from "./utilities/utilities";
+import * as Service from "./services/serviceConfig";
 
 function App() {
   const bouseList = [
@@ -51,111 +51,72 @@ function App() {
     { title: "ورق سرد", price: "1،386،578", percent: "+6.03" },
   ];
 
-  const [tokenLoading, setTokenLoading] = useState(true);
-  const [tickers, setTickers] = useState([]);
-  const [exchanges, setExchanges] = useState([]);
-  const [exchangesLoading, setExchangesLoading] = useState(true);
-
-  // useEffect(() => {
-  //   axios
-  //     .post("http://localhost:3002/get-token", {
-  //       // username: "your_username",
-  //       // password: "your_password",
-  //     })
-  //     .then((response) => {
-  //       console.log("Token:", response.data.token);
-  //       setTokenLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching token:", error.message);
-  //       setTokenLoading(false);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   // Fetch the token from the Node.js server
-  //   axios
-  //     .post("http://localhost:3001/get-token", {
-  //       username: "your_username",
-  //       password: "your_password",
-  //     })
-  //     .then((response) => {
-  //       console.log("Token:", response.data.token);
-  //       // After getting the token, fetch tickers data from the API
-  //       axios
-  //         .get("http://localhost:3001/get-tickers", {
-  //           headers: {
-  //             Authorization: `Bearer ${response.data.token}`,
-  //           },
-  //         })
-  //         .then((response) => {
-  //           console.log("Tickers:", response.data);
-  //           setTickers(response.data);
-  //         })
-  //         .catch((error) => {
-  //           console.error("Error fetching tickers:", error.message);
-  //         });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching token:", error.message);
-  //     });
-  // }, []);
+  const initialState = {
+    tickers: {
+      data: null,
+      loading: true,
+    },
+    exchanges: {
+      data: null,
+      loading: true,
+    },
+  };
+  const reducer = (filter, action) => {
+    return {
+      tickers: action.tickers,
+      exchanges: action.exchanges,
+    };
+  };
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetchTickers();
     fetchExchanges();
   }, []);
 
-  // const fetchTickers = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "https://daily-market-report-server.iran.liara.run/tickers"
-  //     );
-  //     setTickers(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching tickers:", error.message);
-  //   }
-  // };
-
-  // const fetchExchanges = async () => {
-  //   setExchangesLoading(true);
-  //   try {
-  //     const response = await axios.get(
-  //       // "https://daily-market-report-server.iran.liara.run/exchanges"
-  //       "http://localhost:8002/exchanges"
-  //     );
-  //     setExchanges(response.data);
-  //     setExchangesLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching exchanges:", error.message);
-  //     setExchangesLoading(false);
-  //   }
-  // };
-
-  const fetchTickers = async () => {
-    axios
-      .get("https://daily-market-report-server.iran.liara.run/tickers")
-      .then((response) => {
-        setTickers(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching tickers:", error);
-      });
+  const fetchTickers = () => {
+    Service.get(
+      `/tickers`,
+      {},
+      (status, data) => {
+        if (status === 200) {
+          dispatch({
+            ...state,
+            tickers: { data: data, loading: false },
+          });
+        }
+      },
+      (status) => {}
+    );
   };
 
-  const fetchExchanges = async () => {
-    setExchangesLoading(true);
-    axios
-      .get("https://daily-market-report-server.iran.liara.run/exchanges")
-      .then((response) => {
-        setExchanges(response.data);
-        setExchangesLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching exchanges:", error);
-        setExchangesLoading(false);
-      });
+  const fetchExchanges = () => {
+    dispatch({
+      ...state,
+      exchanges: { data: state.exchanges.data, loading: true },
+    });
+    Service.get(
+      `/exchanges`,
+      {},
+      (status, data) => {
+        if (status === 200) {
+          console.log(data);
+          dispatch({
+            ...state,
+            exchanges: { data: data, loading: false },
+          });
+        }
+      },
+      (status) => {
+        dispatch({
+          ...state,
+          exchanges: { data: state.exchanges.data, loading: false },
+        });
+      }
+    );
   };
+
+  console.log(state);
 
   return (
     <div className="App">
@@ -176,15 +137,21 @@ function App() {
                   {[...Array(6).keys()].map((i) => (
                     <InnerBox key={i} title={"exchanges.items[0].name"}>
                       <div className="flex flex-col gap-[1px] items-center">
-                        {!exchangesLoading ? (
+                        {!state.exchanges.loading ? (
                           <>
                             <h5 className="text-black text-[24px] font-bold text-center">
-                              {thousandSeparator(
-                                exchanges.items[0].quotes[0].value
-                              )}
+                              {state.exchanges.data.items.length > 0
+                                ? thousandSeparator(
+                                    state.exchanges.data.items[0].quotes[0]
+                                      .value
+                                  )
+                                : "بدون اطلاعات"}
                             </h5>
                             <h6 className="text-green text-[18px] font-bold text-center">
-                              {exchanges.items[0].quotes[0].value}
+                              {state.exchanges.data.items.length > 0
+                                ? state.exchanges.data.items[0].quotes[0]
+                                    .numberOfTrades
+                                : "بدون اطلاعات"}
                             </h6>
                           </>
                         ) : (
