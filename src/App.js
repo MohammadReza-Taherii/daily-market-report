@@ -61,62 +61,103 @@ function App() {
       loading: true,
     },
   };
-  const reducer = (filter, action) => {
-    return {
-      tickers: action.tickers,
-      exchanges: action.exchanges,
-    };
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "tickers":
+        return {
+          ...state,
+          tickers: action.payload,
+        };
+      case "exchanges":
+        return {
+          ...state,
+          exchanges: action.payload,
+        };
+      default:
+        throw new Error();
+    }
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    fetchTickers();
-    fetchExchanges();
+    fetchData("tickers");
+    fetchData("exchanges");
   }, []);
 
-  const fetchTickers = () => {
-    Service.get(
-      `/tickers`,
-      {},
-      (status, data) => {
-        if (status === 200) {
-          dispatch({
-            ...state,
-            tickers: { data: data, loading: false },
-          });
-        }
-      },
-      (status) => {}
-    );
-  };
-
-  const fetchExchanges = () => {
+  const fetchData = (type) => {
     dispatch({
-      ...state,
-      exchanges: { data: state.exchanges.data, loading: true },
+      type: type,
+      payload: { data: state.tickers.data, loading: true },
     });
     Service.get(
-      `/exchanges`,
+      `/${type}`,
       {},
       (status, data) => {
         if (status === 200) {
-          console.log(data);
           dispatch({
-            ...state,
-            exchanges: { data: data, loading: false },
+            type: type,
+            payload: { data: data, loading: false },
           });
         }
       },
       (status) => {
         dispatch({
-          ...state,
-          exchanges: { data: state.exchanges.data, loading: false },
+          type: type,
+          payload: { data: state.tickers.data, loading: false },
         });
       }
     );
   };
 
-  console.log(state);
+  // const fetchTickers = () => {
+  // dispatch({
+  //   type: "tickers",
+  //   payload: { data: state.tickers.data, loading: true },
+  // });
+  // Service.get(
+  //   `/tickers`,
+  //   {},
+  //   (status, data) => {
+  //     if (status === 200) {
+  //       dispatch({
+  //         type: "tickers",
+  //         payload: { data: data, loading: false },
+  //       });
+  //     }
+  //   },
+  //   (status) => {
+  //     dispatch({
+  //       type: "tickers",
+  //       payload: { data: state.tickers.data, loading: false },
+  //     });
+  //   }
+  // );
+  // };
+
+  // const fetchExchanges = () => {
+  // dispatch({
+  //   type: "exchanges",
+  //   payload: { data: state.exchanges.data, loading: true },
+  // });
+  // Service.get(
+  //   `/exchanges`,
+  //   {},
+  //   (status, data) => {
+  //     if (status === 200) {
+  //       dispatch({
+  //         type: "exchanges",
+  //         payload: { data: data, loading: false },
+  //       });
+  //     }
+  //   },
+  //   (status) => {
+  //     dispatch({
+  //       type: "exchanges",
+  //       payload: { data: state.exchanges.data, loading: false },
+  //     });
+  //   }
+  // );
+  // };
 
   return (
     <div className="App">
