@@ -3,9 +3,10 @@ import "./App.css";
 import InnerBox from "./component/InnerBox";
 import OuterBox from "./component/OuterBox";
 import clsx from "clsx";
-import { BeatLoader } from "react-spinners";
-import { thousandSeparator } from "./utilities/utilities";
 import * as Service from "./services/serviceConfig";
+import GoldAndCoin from "./component/GoldAndCoin";
+import StockMarket from "./component/StockMarket";
+import EnergyAndMetal from "./component/EnergyAndMetal";
 
 function App() {
   const bouseList = [
@@ -29,16 +30,6 @@ function App() {
     { title: "شتران", percent: 6.03, subtitle: "ارزش معامله: 12،000،000" },
   ];
 
-  const currencyAndGoldList = [
-    { title: "دلار آزاد", price: "1،386،578", percent: "+6.03" },
-    { title: "بیتکوین", price: "1،386،578", percent: "+6.03" },
-    { title: "انس جهانی طلا", price: "1،386،578", percent: "+6.03" },
-    { title: "طلا گرمی", price: "1،386،578", percent: "+6.03" },
-    { title: "ربع سکه", price: "1،386،578", percent: "+6.03" },
-    { title: "نیم سکه", price: "1،386،578", percent: "+6.03" },
-    { title: "تمام سکه", price: "1،386،578", percent: "+6.03" },
-  ];
-
   const commodityList = [
     { title: "نفت برنت", price: "1،386،578", percent: "+6.03" },
     { title: "متانول", price: "1،386،578", percent: "+6.03" },
@@ -60,6 +51,10 @@ function App() {
       data: null,
       loading: true,
     },
+    goldAndCoin: {
+      data: null,
+      loading: true,
+    },
   };
   const reducer = (state, action) => {
     switch (action.type) {
@@ -73,6 +68,11 @@ function App() {
           ...state,
           exchanges: action.payload,
         };
+      case "commodityRates/goldAndCoin":
+        return {
+          ...state,
+          goldAndCoin: action.payload,
+        };
       default:
         throw new Error();
     }
@@ -80,18 +80,22 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    fetchData("tickers");
-    fetchData("exchanges");
+    // fetchData("tickers");
+    // fetchData("exchanges");
+    // fetchData("commodityRates/goldAndCoin", {
+    //   items: "XAUUSD,IMCOIN,BACOIN",
+    //   date: "20230903,20230913",
+    // });
   }, []);
 
-  const fetchData = (type) => {
+  const fetchData = (type, params = {}) => {
     dispatch({
       type: type,
       payload: { data: state.tickers.data, loading: true },
     });
     Service.get(
       `/${type}`,
-      {},
+      params,
       (status, data) => {
         if (status === 200) {
           dispatch({
@@ -109,56 +113,6 @@ function App() {
     );
   };
 
-  // const fetchTickers = () => {
-  // dispatch({
-  //   type: "tickers",
-  //   payload: { data: state.tickers.data, loading: true },
-  // });
-  // Service.get(
-  //   `/tickers`,
-  //   {},
-  //   (status, data) => {
-  //     if (status === 200) {
-  //       dispatch({
-  //         type: "tickers",
-  //         payload: { data: data, loading: false },
-  //       });
-  //     }
-  //   },
-  //   (status) => {
-  //     dispatch({
-  //       type: "tickers",
-  //       payload: { data: state.tickers.data, loading: false },
-  //     });
-  //   }
-  // );
-  // };
-
-  // const fetchExchanges = () => {
-  // dispatch({
-  //   type: "exchanges",
-  //   payload: { data: state.exchanges.data, loading: true },
-  // });
-  // Service.get(
-  //   `/exchanges`,
-  //   {},
-  //   (status, data) => {
-  //     if (status === 200) {
-  //       dispatch({
-  //         type: "exchanges",
-  //         payload: { data: data, loading: false },
-  //       });
-  //     }
-  //   },
-  //   (status) => {
-  //     dispatch({
-  //       type: "exchanges",
-  //       payload: { data: state.exchanges.data, loading: false },
-  //     });
-  //   }
-  // );
-  // };
-
   return (
     <div className="App">
       <div className="container mx-auto py-[32px] flex flex-col gap-[32px]">
@@ -172,55 +126,7 @@ function App() {
         </div>
         <div className="flex flex-col gap-[36px]">
           <OuterBox title="بازار سرمایه" className="gap-[36px]">
-            <div className="flex flex-col gap-[24px]">
-              <div className="flex flex-col lg:flex-row gap-[24px]">
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-[24px]">
-                  {[...Array(6).keys()].map((i) => (
-                    <InnerBox key={i} title={"exchanges.items[0].name"}>
-                      <div className="flex flex-col gap-[1px] items-center">
-                        {!state.exchanges.loading ? (
-                          <>
-                            <h5 className="text-black text-[24px] font-bold text-center">
-                              {state.exchanges.data.items.length > 0
-                                ? thousandSeparator(
-                                    state.exchanges.data.items[0].quotes[0]
-                                      .value
-                                  )
-                                : "بدون اطلاعات"}
-                            </h5>
-                            <h6 className="text-green text-[18px] font-bold text-center">
-                              {state.exchanges.data.items.length > 0
-                                ? state.exchanges.data.items[0].quotes[0]
-                                    .numberOfTrades
-                                : "بدون اطلاعات"}
-                            </h6>
-                          </>
-                        ) : (
-                          <BeatLoader color="#999" />
-                        )}
-                      </div>
-                    </InnerBox>
-                  ))}
-                  <InnerBox title="وضعیت نمادها" className="col-span-full">
-                    <div className="w-full text-center">بدون اطلاعات</div>
-                  </InnerBox>
-                </div>
-                <div className="flex-1 grid grid-cols-2 gap-[24px]">
-                  <InnerBox
-                    title="روند شاخص کل و شاخص کل هم‌وزن"
-                    className="col-span-full"
-                  >
-                    <div className="w-full text-center">بدون اطلاعات</div>
-                  </InnerBox>
-                  <InnerBox title="وضعیت صنایع" className="col-span-full">
-                    <div className="w-full text-center">بدون اطلاعات</div>
-                  </InnerBox>
-                </div>
-              </div>
-              <div className="bg-white rounded-[14px] p-[20px] w-full">
-                <p className="text-[14px] font-semibold">توضیحات</p>
-              </div>
-            </div>
+            <StockMarket />
             <h5 className="text-white flex justify-center items-center gap-[12px] text-[22px] font-semibold before:content-[''] before:bg-white before:w-[60px] before:h-[1px] before:flex after:content-[''] after:bg-white after:w-[60px] after:h-[1px] after:flex">
               نمادهای مورد توجه
             </h5>
@@ -236,14 +142,17 @@ function App() {
                             className="flex justify-between items-center"
                           >
                             <p className="text-[14px] font-bold">
-                              {inst.title}
+                              {/* {inst.title} */}
+                              بدون اطلاعات
                             </p>
                             <div className="text-left">
                               <p className="text-green text-[14px] font-bold">
-                                {inst.percent}
+                                {/* {inst.percent} */}
+                                بدون اطلاعات
                               </p>
                               <p className="text-gray text-[12px] font-normal">
-                                {inst.subtitle}
+                                {/* {inst.subtitle} */}
+                                بدون اطلاعات
                               </p>
                             </div>
                           </li>
@@ -263,107 +172,11 @@ function App() {
           </OuterBox>
 
           <OuterBox title="ارز و طلا">
-            <div className="flex flex-col gap-[20px]">
-              <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-8 gap-[20px]">
-                {currencyAndGoldList.slice(0, 2).map((item, i) => (
-                  <InnerBox
-                    key={i}
-                    title={item.title}
-                    className={clsx(
-                      i === 0 && "sm:col-start-1 md:col-start-2",
-                      "sm:col-span-2 md:col-span-3"
-                    )}
-                  >
-                    <div className="flex flex-col gap-[1px]">
-                      <h5 className="text-black text-[24px] font-bold text-center">
-                        {item.price}
-                      </h5>
-                      <h6 className="text-green text-[18px] font-bold text-center">
-                        {item.percent}
-                      </h6>
-                    </div>
-                  </InnerBox>
-                ))}
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-10 gap-[20px]">
-                {currencyAndGoldList.slice(2, 7).map((item, i) => (
-                  <InnerBox
-                    key={i}
-                    title={item.title}
-                    className={clsx(
-                      "sm:col-span-2 md:col-span-2",
-                      currencyAndGoldList.length - 1 === i + 3 &&
-                        "sm:col-start-2",
-                      currencyAndGoldList.length === i + 3 && "sm:col-start-4"
-                    )}
-                  >
-                    <div className="flex flex-col gap-[1px]">
-                      <h5 className="text-black text-[24px] font-bold text-center">
-                        {item.price}
-                      </h5>
-                      <h6 className="text-green text-[18px] font-bold text-center">
-                        {item.percent}
-                      </h6>
-                    </div>
-                  </InnerBox>
-                ))}
-              </div>
-              <div className="bg-white rounded-[14px] p-[20px] col-span-full">
-                <p className="text-[14px] font-semibold">توضیحات</p>
-              </div>
-            </div>
+            <GoldAndCoin />
           </OuterBox>
 
           <OuterBox title="کامودیتی">
-            <div className="flex flex-col gap-[20px]">
-              <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-8 gap-[20px]">
-                {commodityList.slice(0, 3).map((item, i) => (
-                  <InnerBox
-                    key={i}
-                    title={item.title}
-                    className={clsx(
-                      i === 0 &&
-                        "sm:col-start-1 md:col-start-auto lg:col-start-2",
-                      "col-span-2 md:col-span-1 lg:col-span-2",
-                      i === 2 && "sm:col-start-2 md:col-start-auto"
-                    )}
-                  >
-                    <div className="flex flex-col gap-[1px]">
-                      <h5 className="text-black text-[24px] font-bold text-center">
-                        {item.price}
-                      </h5>
-                      <h6 className="text-green text-[18px] font-bold text-center">
-                        {item.percent}
-                      </h6>
-                    </div>
-                  </InnerBox>
-                ))}
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12  gap-[20px]">
-                {commodityList.slice(3, 9).map((item, i) => (
-                  <InnerBox
-                    key={i}
-                    title={item.title}
-                    className={clsx(
-                      "col-span-2",
-                      i === 4 && "md:col-start-3 lg:col-start-auto"
-                    )}
-                  >
-                    <div className="flex flex-col gap-[1px]">
-                      <h5 className="text-black text-[24px] font-bold text-center">
-                        {item.price}
-                      </h5>
-                      <h6 className="text-green text-[18px] font-bold text-center">
-                        {item.percent}
-                      </h6>
-                    </div>
-                  </InnerBox>
-                ))}
-              </div>
-              <div className="bg-white rounded-[14px] p-[20px] col-span-full">
-                <p className="text-[14px] font-semibold">توضیحات</p>
-              </div>
-            </div>
+            <EnergyAndMetal />
           </OuterBox>
         </div>
       </div>
