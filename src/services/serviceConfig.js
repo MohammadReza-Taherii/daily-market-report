@@ -15,7 +15,7 @@ const get = (path, params, callback, errorHandler) => {
       if (response) callback(response.status, response.data);
     })
     .catch((error) => {
-      console.log(`Error fetching ${path}:`, error.response.statusText);
+      console.log(`Error fetching ${path}:`, error.response?.statusText);
       errorHandler(error.response.status);
     });
 };
