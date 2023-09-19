@@ -31,7 +31,7 @@ export function thousandSeparator(number) {
 }
 
 export function percent(number) {
-  if (!number)
+  if (number !== 0 && !number)
     return (
       <span className={"text-[18px] font-bold text-center text-gray"}>---</span>
     );
