@@ -16,10 +16,10 @@ const EnergyAndMetal = () => {
       close: null,
       changePercent: null,
     },
-    { item: "", title: "متانول", close: null, changePercent: null },
+    { item: "WTI", title: "نفت سبک", close: null, changePercent: null },
     {
-      item: "",
-      title: "اوره گرانوله",
+      item: "OPEC",
+      title: "نفت اپک",
       close: null,
       changePercent: null,
     },
@@ -27,18 +27,18 @@ const EnergyAndMetal = () => {
     { item: "Al", title: "آلومینیوم", close: null, changePercent: null },
     { item: "Zn", title: "روی", close: null, changePercent: null },
     {
-      item: "",
-      title: "بیلت",
+      item: "Ni",
+      title: "نیکل",
       close: null,
       changePercent: null,
     },
-    { item: "", title: "ورق گرم", close: null, changePercent: null },
-    { item: "", title: "ورق سرد", close: null, changePercent: null },
+    { item: "Pb", title: "سرب", close: null, changePercent: null },
+    { item: "Sn", title: "قلع", close: null, changePercent: null },
   ];
 
   useEffect(() => {
     fetchData("commodityRates/energyAndMetal", {
-      items: "BRENT,Cu,Al,Zn",
+      items: "BRENT,Cu,Al,Zn,Pb,Sn,Ni,WTI,OPEC",
     });
   }, []);
 

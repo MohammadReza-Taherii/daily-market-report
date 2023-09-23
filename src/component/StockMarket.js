@@ -10,35 +10,44 @@ const StockMarket = () => {
 
   const initialData = [
     {
-      isin: "IRIFBNO",
+      isin: "IRX6XTPI0026",
       title: "شاخص هم‌وزن بورس",
-      value: null,
+      close: null,
+      percent: null,
     },
-    { isin: "IRTSENO", title: "شاخص کل بورس", value: null },
+    { isin: "IRX6XTPI0006", title: "شاخص کل بورس", close: null, percent: null },
     {
-      isin: "",
+      // isin: "buyVolumeInds",
       title: "ارزش معاملات خرد سهام",
-      value: null,
+      close: null,
+      percent: null,
     },
     {
-      isin: "",
+      isin: "buyValueInds",
       title: "سرانه خرید حقیقی",
-      value: null,
+      close: null,
+      percent: null,
     },
     {
-      isin: "",
+      isin: "enterValueInds",
       title: "ورود پول حقیقی به سهام",
-      value: null,
+      close: null,
+      percent: null,
     },
     {
-      isin: "",
+      // isin: "bondsBuyVolumeInds",
       title: "ورود پول حقیقی به صندوق‌های با درآمد ثابت",
-      value: null,
+      close: null,
+      percent: null,
     },
   ];
 
   useEffect(() => {
-    fetchData("exchanges");
+    // // fetchData("exchanges");
+    // fetchData("stocks");
+    // fetchData("indices");
+    // fetchData("bonds");
+    fetchData("dataSet");
   }, []);
 
   const fetchData = (type, params = {}) => {
@@ -49,7 +58,6 @@ const StockMarket = () => {
       (status, resData) => {
         if (status === 200) {
           setData(resData);
-          console.log(resData);
           setLoading(false);
         }
       },
@@ -68,11 +76,14 @@ const StockMarket = () => {
               <div className="flex flex-col gap-[1px] items-center">
                 {!loading ? (
                   <>
-                    <h5 className="text-black text-[24px] font-bold text-center">
-                      {thousandSeparator(data[item.isin]?.value)}
+                    <h5
+                      className="text-black text-[24px] font-bold text-center"
+                      dir="ltr"
+                    >
+                      {thousandSeparator(data[item.isin]?.close)}
                     </h5>
                     {/* <h6 className="text-green text-[18px] font-bold text-center"> */}
-                    {percent(data[item.isin]?.value)}
+                    {percent(data[item.isin]?.percent)}
                     {/* </h6> */}
                   </>
                 ) : (

@@ -23,9 +23,9 @@ const GoldAndCoin = () => {
       close: null,
       changePercent: null,
     },
-    { item: "", title: "طلا گرمی", close: null, changePercent: null },
-    { item: "", title: "ربع سکه", close: null, changePercent: null },
-    { item: "", title: "نیم سکه", close: null, changePercent: null },
+    { item: "Gold18", title: "طلا گرمی", close: null, changePercent: null },
+    { item: "QUCOIN", title: "ربع سکه", close: null, changePercent: null },
+    { item: "HACOIN", title: "نیم سکه", close: null, changePercent: null },
     {
       item: "BACOIN",
       title: "تمام سکه",
@@ -36,7 +36,7 @@ const GoldAndCoin = () => {
 
   useEffect(() => {
     fetchData("commodityRates/goldAndCoin", {
-      items: "XAUUSD,IMCOIN,BACOIN",
+      items: "XAUUSD,IMCOIN,BACOIN,Gold18,QUCOIN,HACOIN",
       // date: "20230903,20230913",
     });
     fetchData("commodityRates/digitalCurrency", {
