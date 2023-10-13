@@ -123,9 +123,9 @@ const GoldAndCoin = () => {
           </InnerBox>
         ))}
       </div>
-      <div className="bg-white rounded-[14px] p-[20px] col-span-full">
+      {/* <div className="bg-white rounded-[14px] p-[20px] col-span-full">
         <p className="text-[14px] font-semibold">توضیحات</p>
-      </div>
+      </div> */}
     </div>
   );
 };

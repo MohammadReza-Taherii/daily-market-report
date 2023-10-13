@@ -16,13 +16,13 @@ const EnergyAndMetal = () => {
       close: null,
       changePercent: null,
     },
-    { item: "WTI", title: "نفت سبک", close: null, changePercent: null },
-    {
-      item: "OPEC",
-      title: "نفت اپک",
-      close: null,
-      changePercent: null,
-    },
+    // { item: "WTI", title: "نفت سبک", close: null, changePercent: null },
+    // {
+    //   item: "OPEC",
+    //   title: "نفت اپک",
+    //   close: null,
+    //   changePercent: null,
+    // },
     { item: "Cu", title: "مس", close: null, changePercent: null },
     { item: "Al", title: "آلومینیوم", close: null, changePercent: null },
     { item: "Zn", title: "روی", close: null, changePercent: null },
@@ -90,12 +90,12 @@ const EnergyAndMetal = () => {
         ))}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12  gap-[20px]">
-        {initialData.slice(3, 9).map((item, i) => (
+        {initialData.slice(3, 7).map((item, i) => (
           <InnerBox
             key={i}
             title={item.title}
             className={clsx(
-              "col-span-2",
+              "col-span-4 lg:col-span-3",
               i === 4 && "md:col-start-3 lg:col-start-auto"
             )}
           >
@@ -116,9 +116,9 @@ const EnergyAndMetal = () => {
           </InnerBox>
         ))}
       </div>
-      <div className="bg-white rounded-[14px] p-[20px] col-span-full">
+      {/* <div className="bg-white rounded-[14px] p-[20px] col-span-full">
         <p className="text-[14px] font-semibold">توضیحات</p>
-      </div>
+      </div> */}
     </div>
   );
 };

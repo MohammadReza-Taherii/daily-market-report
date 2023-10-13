@@ -127,7 +127,7 @@ function App() {
         <div className="flex flex-col gap-[36px]">
           <OuterBox title="بازار سرمایه" className="gap-[36px]">
             <StockMarket />
-            <h5 className="text-white flex justify-center items-center gap-[12px] text-[22px] font-semibold before:content-[''] before:bg-white before:w-[60px] before:h-[1px] before:flex after:content-[''] after:bg-white after:w-[60px] after:h-[1px] after:flex">
+            {/* <h5 className="text-white flex justify-center items-center gap-[12px] text-[22px] font-semibold before:content-[''] before:bg-white before:w-[60px] before:h-[1px] before:flex after:content-[''] after:bg-white after:w-[60px] after:h-[1px] after:flex">
               نمادهای مورد توجه
             </h5>
             <div className="flex flex-col gap-[20px]">
@@ -142,16 +142,16 @@ function App() {
                             className="flex justify-between items-center"
                           >
                             <p className="text-[14px] font-bold">
-                              {/* {inst.title} */}
+                              {inst.title}
                               بدون اطلاعات
                             </p>
                             <div className="text-left">
                               <p className="text-green text-[14px] font-bold">
-                                {/* {inst.percent} */}
+                                {inst.percent}
                                 بدون اطلاعات
                               </p>
                               <p className="text-gray text-[12px] font-normal">
-                                {/* {inst.subtitle} */}
+                                {inst.subtitle}
                                 بدون اطلاعات
                               </p>
                             </div>
@@ -168,7 +168,7 @@ function App() {
               <div className="bg-white rounded-[14px] p-[20px]">
                 <p className="text-[14px] font-semibold">توضیحات</p>
               </div>
-            </div>
+            </div> */}
           </OuterBox>
 
           <OuterBox title="ارز و طلا">
