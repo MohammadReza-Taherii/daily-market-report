@@ -35,17 +35,29 @@ const GoldAndCoin = () => {
   ];
 
   useEffect(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    const formattedDate = `${year}${month}${day}`;
+
+    today.setDate(today.getDate() - 1);
+    const yearY = today.getFullYear();
+    const monthY = String(today.getMonth() + 1).padStart(2, "0");
+    const dayY = String(today.getDate()).padStart(2, "0");
+    const formattedDateY = `${yearY}${monthY}${dayY}`;
+
     fetchData("commodityRates/goldAndCoin", {
       items: "XAUUSD,IMCOIN,BACOIN,Gold18,QUCOIN,HACOIN",
-      // date: "20230903,20230913",
+      date: `${formattedDateY},${formattedDate}`,
     });
     fetchData("commodityRates/digitalCurrency", {
       items: "BTC",
-      // date: "20230903,20230913",
+      date: `${formattedDate},${formattedDate}`,
     });
     fetchData("currencyRates", {
       items: "USD",
-      // date: "20230903,20230913",
+      date: `${formattedDate},${formattedDate}`,
     });
   }, []);
 
