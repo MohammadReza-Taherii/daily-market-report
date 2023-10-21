@@ -47,11 +47,48 @@ const StockMarket = () => {
       legend: {
         position: "top",
         display: false,
+        labels: {
+          font: {
+            size: 18,
+            family: "PeydaWeb",
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+        bodyFont: {
+          family: "PeydaWeb",
+          size: 12,
+        },
+        titleFont: {
+          family: "PeydaWeb",
+          size: 12,
+        },
       },
       title: {
         display: false,
         // text: "Chart.js Line Chart",
       },
+      // scales: {
+      //   x: {
+      //     stacked: true,
+      //     ticks: {
+      //       font: {
+      //         family: "PeydaWeb",
+      //         size: 12,
+      //       },
+      //     },
+      //   },
+      //   y: {
+      //     stacked: true,
+      //     ticks: {
+      //       font: {
+      //         family: "PeydaWeb",
+      //         size: 12,
+      //       },
+      //     },
+      //   },
+      // },
     },
   };
 
@@ -127,6 +164,14 @@ const StockMarket = () => {
     ],
   };
 
+  // var bars = dataBar.datasets[0].bars;
+  // for (let i = 0; i < bars.length; i++) {
+  //   var color = "green";
+  //   //You can check for bars[i].value and put your conditions here
+  //   bars[i].fillColor = color;
+  // }
+  // dataBar.update();
+
   const optionsBar = {
     plugins: {
       title: {
@@ -136,15 +181,44 @@ const StockMarket = () => {
       legend: {
         position: "top",
         display: false,
+        labels: {
+          font: {
+            size: 18,
+            family: "PeydaWeb",
+          },
+        },
+      },
+      tooltip: {
+        enabled: true,
+        bodyFont: {
+          family: "PeydaWeb",
+          size: 12,
+        },
+        titleFont: {
+          family: "PeydaWeb",
+          size: 12,
+        },
       },
     },
     responsive: true,
     scales: {
       x: {
         stacked: true,
+        ticks: {
+          font: {
+            family: "PeydaWeb",
+            size: 12,
+          },
+        },
       },
       y: {
         stacked: true,
+        ticks: {
+          font: {
+            family: "PeydaWeb",
+            size: 12,
+          },
+        },
       },
     },
   };
@@ -262,7 +336,7 @@ const StockMarket = () => {
         </InnerBox>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-[24px]">
-        <InnerBox title="وضعیت صنایع" className="col-span-full">
+        <InnerBox title="تاثیر بر شاخص" className="col-span-full">
           {data?.effectOnIndex?.length > 0 ? (
             loading ? (
               <div className="flex justify-center items-center">
