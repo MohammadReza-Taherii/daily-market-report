@@ -25,6 +25,12 @@
     url("./fonts/PeydaWeb-ExtraBold.woff") format("woff");
   font-weight: 900;
 }
+@font-face {
+  font-family: "DANA";
+  src: local("DANA-FANUM-MEDIUM"),
+    url("./fonts/DANA-FANUM-MEDIUM.woff2") format("woff2");
+  font-weight: 900;
+}
 
 body {
   background: #e7e8ea;
