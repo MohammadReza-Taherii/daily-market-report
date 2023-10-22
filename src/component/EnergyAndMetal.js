@@ -43,9 +43,15 @@ const EnergyAndMetal = () => {
     const day = String(today.getDate()).padStart(2, "0");
     const formattedDate = `${year}${month}${day}`;
 
+    today.setDate(today.getDate() - 1);
+    const yearY = today.getFullYear();
+    const monthY = String(today.getMonth() + 1).padStart(2, "0");
+    const dayY = String(today.getDate()).padStart(2, "0");
+    const formattedDateY = `${yearY}${monthY}${dayY}`;
+
     fetchData("commodityRates/energyAndMetal", {
       items: "BRENT,Cu,Al,Zn,Pb,Sn,Ni,WTI,OPEC",
-      date: `${formattedDate},${formattedDate}`,
+      date: `${formattedDateY},${formattedDate}`,
     });
   }, []);
 
