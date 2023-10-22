@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./App.css";
 import InnerBox from "./component/InnerBox";
 import OuterBox from "./component/OuterBox";
@@ -7,8 +7,24 @@ import * as Service from "./services/serviceConfig";
 import GoldAndCoin from "./component/GoldAndCoin";
 import StockMarket from "./component/StockMarket";
 import EnergyAndMetal from "./component/EnergyAndMetal";
+import jalaliMoment from "jalali-moment";
+import { convertToPersianDigits } from "./utilities/utilities";
 
 function App() {
+  const [jalaliDate, setJalaliDate] = useState("");
+
+  useEffect(() => {
+    const currentGregorianDate = jalaliMoment()
+      .locale("en")
+      .format("YYYY-MM-DD");
+    const currentJalaliDate = jalaliMoment(
+      currentGregorianDate,
+      "YYYY-MM-DD"
+    ).format("jYYYY/jMM/jDD");
+
+    setJalaliDate(currentJalaliDate);
+  }, []);
+
   const bouseList = [
     { title: "شاخص هم‌وزن بورس", price: "1،386،578", percent: "+6.03" },
     { title: "شاخص کل بورس", price: "1،386،578", percent: "+6.03" },
@@ -120,7 +136,9 @@ function App() {
           <div className="w-full flex gap-[18px] text-primary before:bg-primary before:h-full before:w-[3px] before:content-[''] before:flex before:rounded">
             <div>
               <h1 className="text-[48px] font-extrabold">گزارش روزانه بازار</h1>
-              <h5 className="text-[26px] font-normal">1402/01/19</h5>
+              <h5 className="text-[26px] font-normal">
+                {convertToPersianDigits(jalaliDate)}
+              </h5>
             </div>
           </div>
         </div>
