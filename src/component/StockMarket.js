@@ -36,6 +36,9 @@ ChartJS.register(
   Legend
 );
 
+ChartJS.defaults.font.family = "PeydaWeb";
+ChartJS.defaults.font.size = 12;
+
 const StockMarket = () => {
   const jalaliMoment = require("jalali-moment");
   const [data, setData] = useState({});
@@ -69,26 +72,6 @@ const StockMarket = () => {
         display: false,
         // text: "Chart.js Line Chart",
       },
-      // scales: {
-      //   x: {
-      //     stacked: true,
-      //     ticks: {
-      //       font: {
-      //         family: "PeydaWeb",
-      //         size: 12,
-      //       },
-      //     },
-      //   },
-      //   y: {
-      //     stacked: true,
-      //     ticks: {
-      //       font: {
-      //         family: "PeydaWeb",
-      //         size: 12,
-      //       },
-      //     },
-      //   },
-      // },
     },
   };
 
@@ -112,8 +95,8 @@ const StockMarket = () => {
               )
             : []
           : [],
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
@@ -159,7 +142,14 @@ const StockMarket = () => {
             ? data.effectOnIndex.map((item) => item.value)
             : []
           : [],
-        backgroundColor: "rgb(255, 99, 132)",
+        // backgroundColor: "rgb(255, 99, 132)",
+        backgroundColor: !loading
+          ? data?.effectOnIndex?.length > 0
+            ? data?.effectOnIndex.map((item) =>
+                item.value < 0 ? "#FF7A8A" : "#40C79A"
+              )
+            : "gray"
+          : "gray",
       },
     ],
   };
@@ -181,56 +171,56 @@ const StockMarket = () => {
       legend: {
         position: "top",
         display: false,
-        labels: {
-          font: {
-            size: 18,
-            family: "PeydaWeb",
-          },
-        },
+        // labels: {
+        //   font: {
+        //     size: 18,
+        //     family: "PeydaWeb",
+        //   },
+        // },
       },
       tooltip: {
         enabled: true,
-        bodyFont: {
-          family: "PeydaWeb",
-          size: 12,
-        },
-        titleFont: {
-          family: "PeydaWeb",
-          size: 12,
-        },
+        // bodyFont: {
+        //   family: "PeydaWeb",
+        //   size: 12,
+        // },
+        // titleFont: {
+        //   family: "PeydaWeb",
+        //   size: 12,
+        // },
       },
     },
     responsive: true,
     scales: {
       x: {
         stacked: true,
-        ticks: {
-          font: {
-            family: "PeydaWeb",
-            size: 12,
-          },
-        },
+        // ticks: {
+        //   font: {
+        //     family: "PeydaWeb",
+        //     size: 12,
+        //   },
+        // },
       },
       y: {
         stacked: true,
-        ticks: {
-          font: {
-            family: "PeydaWeb",
-            size: 12,
-          },
-        },
+        // ticks: {
+        //   font: {
+        //     family: "PeydaWeb",
+        //     size: 12,
+        //   },
+        // },
       },
     },
   };
 
   const initialData = [
+    { isin: "IRX6XTPI0006", title: "شاخص کل بورس", close: null, percent: null },
     {
       isin: "IRX6XTPI0026",
       title: "شاخص هم‌وزن بورس",
       close: null,
       percent: null,
     },
-    { isin: "IRX6XTPI0006", title: "شاخص کل بورس", close: null, percent: null },
     // {
     //   // isin: "buyVolumeInds",
     //   title: "ارزش معاملات خرد سهام",
