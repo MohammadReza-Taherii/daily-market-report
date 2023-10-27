@@ -49,15 +49,15 @@ const GoldAndCoin = () => {
 
     fetchData("commodityRates/goldAndCoin", {
       items: "XAUUSD,IMCOIN,BACOIN,Gold18,QUCOIN,HACOIN",
-      date: `${formattedDateY},${formattedDate}`,
+      date: `${formattedDate},${formattedDate}`,
     });
     fetchData("commodityRates/digitalCurrency", {
       items: "BTC",
-      date: `${formattedDateY},${formattedDate}`,
+      date: `${formattedDate},${formattedDate}`,
     });
     fetchData("currencyRates", {
       items: "USD",
-      date: `${formattedDateY},${formattedDate}`,
+      date: `${formattedDate},${formattedDate}`,
     });
   }, []);
 
